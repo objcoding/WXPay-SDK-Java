@@ -32,6 +32,24 @@ public class WXPayUtil {
     public static Map<String, String> xmlToMap(String strXML) throws Exception {
         Map<String, String> data = new HashMap<String, String>();
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+        // 禁用XML外部实体注入
+        /**
+         * XXE
+         * XML 外部实体注入漏洞(XML External Entity Injection，简称 XXE)，
+         * 是一种容易被忽视，但危害巨大的漏洞。它可以利用 XML 外部实体加载注入，
+         * 执行不可预控的代码，可导致读取任意文件、执行系统命令、探测内网端口、攻击内网网站等危害。
+         */
+
+        /**
+         * 原理：
+         * 通常，我们在使用微信支付时，商家会有一个通知的 URL 来接收异步支付结果。
+         * 然而，微信在 JAVA 版本的 SDK 存在一个 XXE 漏洞来处理这个结果。
+         * 由此攻击者可以向通知的 URL 中构建恶意的回调数据，以便根据需要窃取商家服务器上的任意信息。
+         * 一旦攻击者获得商家的关键安全密钥（md5-key 和merchant-Id），
+         * 那么他们可以通过发送伪造的信息来欺骗商家而无需付费购买任意商品。
+         */
+        documentBuilderFactory.setExpandEntityReferences(false);
         DocumentBuilder documentBuilder= documentBuilderFactory.newDocumentBuilder();
         InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
         org.w3c.dom.Document doc = documentBuilder.parse(stream);
