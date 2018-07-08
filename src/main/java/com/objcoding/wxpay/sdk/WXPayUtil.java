@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -50,6 +51,7 @@ public class WXPayUtil {
          * 那么他们可以通过发送伪造的信息来欺骗商家而无需付费购买任意商品。
          */
         documentBuilderFactory.setExpandEntityReferences(false);
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         DocumentBuilder documentBuilder= documentBuilderFactory.newDocumentBuilder();
         InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
         org.w3c.dom.Document doc = documentBuilder.parse(stream);
