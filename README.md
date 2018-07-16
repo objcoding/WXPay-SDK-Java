@@ -1,23 +1,35 @@
 微信支付 Java SDK
 ------
 
+- **由于微信支付官方 SDK 受 XXE 漏洞影响在 Github 下架了，为了 Gay 友们受到最小的影响，本人秉着敬业的精神，将次漏洞修复好并重新发布到 GitHub 中，并将该项目版本发布到本人 GitHub 的 Maven 仓库中。**
+
+
+
+## 更新日志
+
+- version 0.0.5: 禁用 XML 外部实体注入(XML External Entity Injection，简称 XXE)。
+
+
+
+## 微信支付开发文档API
+
 对[微信支付开发者文档](https://pay.weixin.qq.com/wiki/doc/api/index.html)中给出的API进行了封装。
 
-com.github.wxpay.sdk.WXPay类下提供了对应的方法：
+com.objcoding.wxpay.sdk.WXPay类下提供了对应的方法：
 
-|方法名 | 说明 |
-|--------|--------|
-|microPay| 刷卡支付 |
-|unifiedOrder | 统一下单|
-|orderQuery | 查询订单 |
-|reverse | 撤销订单 |
-|closeOrder|关闭订单|
-|refund|申请退款|
-|refundQuery|查询退款|
-|downloadBill|下载对账单|
-|report|交易保障|
-|shortUrl|转换短链接|
-|authCodeToOpenid|授权码查询openid|
+| 方法名              | 说明          |
+| ---------------- | ----------- |
+| microPay         | 刷卡支付        |
+| unifiedOrder     | 统一下单        |
+| orderQuery       | 查询订单        |
+| reverse          | 撤销订单        |
+| closeOrder       | 关闭订单        |
+| refund           | 申请退款        |
+| refundQuery      | 查询退款        |
+| downloadBill     | 下载对账单       |
+| report           | 交易保障        |
+| shortUrl         | 转换短链接       |
+| authCodeToOpenid | 授权码查询openid |
 
 * 参数为`Map<String, String>`对象，返回类型也是`Map<String, String>`。
 * 方法内部会将参数会转换成含有`appid`、`mch_id`、`nonce_str`、`sign\_type`和`sign`的XML；
@@ -32,18 +44,19 @@ com.github.wxpay.sdk.WXPay类下提供了对应的方法：
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+      <id>objcoding-maven-master-repository</id>
+      <name>objcoding-maven-master-repository</name>
+      <url>https://raw.github.com/objcoding/maven/master/</url>
     </repository>
-</repositories>
+  </repositories>
 ```
 
 添加依赖：
 ```xml
 <dependency>
-    <groupId>com.github.wxpay</groupId>
+    <groupId>com.objcoding</groupId>
     <artifactId>WXPay-SDK-Java</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 
@@ -53,14 +66,14 @@ com.github.wxpay.sdk.WXPay类下提供了对应的方法：
 allprojects {
     repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }
+        maven { url 'https://raw.github.com/objcoding/maven/master/' }
     }
 }
 ```
 添加依赖：
 ```
 dependencies {
-    compile 'com.github.wxpay:WXPay-SDK-Java:0.0.4'
+    compile 'com.objcoding:WXPay-SDK-Java:0.0.5'
 }
 ```
 
@@ -69,7 +82,7 @@ dependencies {
 ## 示例
 配置类MyConfig:
 ```java
-import com.github.wxpay.sdk.WXPayConfig;
+import com.objcoding.wxpay.sdk.WXPayConfig;
 import java.io.*;
 
 public class MyConfig implements WXPayConfig{
@@ -115,7 +128,7 @@ public class MyConfig implements WXPayConfig{
 统一下单：
 
 ```java
-import com.github.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -151,7 +164,7 @@ public class WXPayExample {
 
 订单查询：
 ```java
-import com.github.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -180,7 +193,7 @@ public class WXPayExample {
 退款查询：
 
 ```java
-import com.github.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -209,7 +222,7 @@ public class WXPayExample {
 下载对账单：
 
 ```java
-import com.github.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -240,8 +253,8 @@ public class WXPayExample {
 
 暂时不支持下载压缩格式的对账单，但可以使用该SDK生成请求用的XML数据：
 ```java
-import com.github.wxpay.sdk.WXPay;
-import com.github.wxpay.sdk.WXPayUtil;
+import com.objcoding.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPayUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -272,8 +285,8 @@ public class WXPayExample {
 收到支付结果通知时，需要验证签名，可以这样做：
 ```java
 
-import com.github.wxpay.sdk.WXPay;
-import com.github.wxpay.sdk.WXPayUtil;
+import com.objcoding.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPayUtil;
 
 import java.util.Map;
 
@@ -303,8 +316,8 @@ public class WXPayExample {
 
 HTTPS请求默认使用MD5算法签名，若需要使用HMAC-SHA256：
 ```
-import com.github.wxpay.sdk.WXPay;
-import com.github.wxpay.sdk.WXPayConstants;
+import com.objcoding.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPayConstants;
 
 public class WXPayExample {
 
@@ -318,8 +331,8 @@ public class WXPayExample {
 
 若需要使用sandbox环境：
 ```
-import com.github.wxpay.sdk.WXPay;
-import com.github.wxpay.sdk.WXPayConstants;
+import com.objcoding.wxpay.sdk.WXPay;
+import com.objcoding.wxpay.sdk.WXPayConstants;
 
 public class WXPayExample {
 
